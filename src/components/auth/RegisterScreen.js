@@ -1,8 +1,19 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+
 import { useForm } from '../../hooks/useForm';
+import { removeError, setError } from '../../actions/ui';
+import { startRegisterWithEmailPassword } from '../../actions/auth';
 
 export const RegisterScreen = () => {
+
+    const dispatch = useDispatch();
+
+    const { msgError } = useSelector(state => state.ui);
+    /** El hook useSelecto permite redirigir info desde el Store a la app
+     * Aquí recibe el state de store y lo leemos para poder usar el mensaje de error */
+    console.log(msgError)
 
     const [formValues, handleInputChange] = useForm({
         name: 'Ran Kirlian',
@@ -17,23 +28,27 @@ export const RegisterScreen = () => {
         e.preventDefault();
 
         if (isFormValid()) {
-            console.log(name, email, password, password2);
+            //console.log(name, email, password, password2);
+            dispatch(startRegisterWithEmailPassword(email, password, name))
         }
     }
 
     const isFormValid = () => {
         if (name.trim().length === 0) {
-            console.log('Name is required');
+            dispatch(setError('Name is required'));
+            //console.log('Name is required');
             return false;
         } //else if (email... contra validator.js) {}
         else if (email.trim().length === 0) {
-            console.log('email is required');
+            dispatch(setError('email is required'));
+            //console.log('email is required');
             return false;
         } else if (password !== password2 || password.length < 3) {
-            console.log('password missmatch or malformed');
+            dispatch(setError('password missmatch or malformed'));
+            //console.log('password missmatch or malformed');
             return false;
         }
-
+        dispatch(removeError())
         return true
     }
 
@@ -43,9 +58,12 @@ export const RegisterScreen = () => {
             <h3 className="auth__title">Register</h3>
 
             <form onSubmit={handleRegister}>
-                <div className="auth__alert-error">
-                    hey
-                </div>
+
+                {msgError && // Pinta la capa si hay un mensaje de error y en él muestra dicho error
+                    (<div className="auth__alert-error">
+                        {msgError}
+                    </div>)
+                }
 
                 <input
                     type="text"
@@ -90,7 +108,7 @@ export const RegisterScreen = () => {
                     Register
                 </button>
                 <br />
-                <Link to="/auth/register">
+                <Link to="/auth/login">
                     Already registered?
                 </Link>
             </form>

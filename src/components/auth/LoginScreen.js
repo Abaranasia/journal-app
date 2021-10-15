@@ -1,15 +1,19 @@
 import React from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { startGoogleLogin, startLoginEmailPassword } from '../../actions/auth';
 import { useForm } from '../../hooks/useForm';
+import { startGoogleLogin, startLoginEmailPassword } from '../../actions/auth';
 
 export const LoginScreen = () => {
+
+    /** Este módulo tiene acceso a useDispatch e invoca, dependiendo de la vía de acceso,
+     * al action correspondiente para cada forma de acceso, ya que alguno requiere middleware */
 
 
     const dispatch = useDispatch(); // gestiona el dispatch de redux
 
+    const { loading } = useSelector(state => state.ui) // Esto nos permite identificar si cuándo se está haciendo login
 
     const [formValues, handleInputChange] = useForm({ //useForm
         email: 'rankirlian@gmail.com',
@@ -21,14 +25,14 @@ export const LoginScreen = () => {
 
     const handleLogin = (e) => { // para login con email y password
         e.preventDefault();
-        console.log(email, password);
+        //console.log(email, password);
         //dispatch(login(1028201, 'Ran'))
-        dispatch(startLoginEmailPassword(email, password))
+        dispatch(startLoginEmailPassword(email, password)) // recibe type y payload para enviar al dispatcher
     }
 
 
     const handleGoogleLogin = () => {
-        dispatch(startGoogleLogin());
+        dispatch(startGoogleLogin()); // recibe type y payload para enviar al dispatcher
     }
 
 
@@ -58,6 +62,7 @@ export const LoginScreen = () => {
                 <button
                     type="submit"
                     className="btn btn-primary"
+                    disabled={loading}
                 >
                     Login
                 </button>

@@ -1,5 +1,7 @@
 import { types } from "../types/types";
 
+/** Este módulo es el reducer que gestiona las acciones para el proceso de login y logout */
+
 /**
  * state = {} -> vacio cuando no se está autenticado
  * state = {

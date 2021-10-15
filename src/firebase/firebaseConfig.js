@@ -21,7 +21,7 @@ const db = firebase.firestore(); // Referencia a la BBDD en Firestore
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider(); // referencia al provider de Firebase auth
 
 export {
-    db,
-    googleAuthProvider,
-    firebase
+    db, // Referencia a la base de datos
+    googleAuthProvider, // refrencia a Auth Provider
+    firebase //referencia a firebase
 }
