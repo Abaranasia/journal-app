@@ -33,6 +33,14 @@
     }
 }
 
+.btn-danger {
+    background-color: #990000;
+
+    &:hover {
+        background-color: red;
+    }
+}
+
 .btn-block {
     width: 100%;
 }

@@ -3,7 +3,7 @@ import { NotesAppBar } from './NotesAppBar';
 import { useForm } from '../../hooks/useForm';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { activeNote } from '../../actions/notes';
+import { activeNote, startDeleting } from '../../actions/notes';
 
 
 export const NoteScreen = () => {
@@ -12,9 +12,10 @@ export const NoteScreen = () => {
 
     const { active: actvNote } = useSelector(state => state.notes); //obtiene la info de la nota activa
     const [formValues, handleInputChange, reset] = useForm(actvNote);
-    const { body, title } = formValues;
+    const { body, title, id } = formValues;
 
     const activeId = useRef(actvNote.id); // Almacena una variable mutable que no va a redibujar todo el componente si cambia
+
 
     useEffect(() => { //Esto se disparará solo cuando la id de la nota activa cambie
 
@@ -25,11 +26,16 @@ export const NoteScreen = () => {
 
     }, [actvNote, reset])
 
+
     useEffect(() => {
         //console.log(formValues)
         dispatch(activeNote(formValues.id, { ...formValues })); //despachamos la acción (no confundir con actvNote) y le enviamos el contenido del form
 
     }, [formValues, dispatch])
+
+    const handleDelete = () => { // Borra una nota
+        dispatch(startDeleting(id)) //pasamos el id obtenido desde formValues
+    }
 
     return (
         <div className="notes__main-content">
@@ -56,16 +62,19 @@ export const NoteScreen = () => {
                 </textarea>
 
                 {
-                    (activeNote.url) &&
+                    (actvNote.url) &&
                     (<div className="notes__image">
                     <img
-                        src="https://fotos.hoteles.net/articulos/mejores-puestas-sol-cadiz-6643-1.jpg"
+                            src={actvNote.url}
                         alt="día"
                     />
                     </div>)
                 }
-
             </div>
+
+            <button className="btn btn-danger" onClick={handleDelete}>
+                Delete
+            </button>
         </div>
     )
 }

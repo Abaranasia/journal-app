@@ -3,7 +3,13 @@ import { types } from "../types/types";
 
 import { loadNotes } from "../helpers/loadNotes";
 import Swal from "sweetalert2";
+import { fileUpload } from "../helpers/fileUpload";
 
+/**
+ *
+ * Cloudinary api: journalApp -  https://api.cloudinary.com/v1_1/djtsqm57m
+ *
+ */
 
 export const startNewNote = () => { // Acción para crear una nueva nota
     return async (dispatch, getState) => { //comunicación asíncrona con Thunk 
@@ -19,7 +25,8 @@ export const startNewNote = () => { // Acción para crear una nueva nota
 
         const docRef = await db.collection(`${uid}/journal/notes`).add(newNote); // referencia al documento en Firestore donde añadir una nueva nota para este usuario
         // console.log(docRef)
-        dispatch(activeNote(docRef.id, newNote))
+        dispatch(activeNote(docRef.id, newNote));
+        dispatch(addNewNote(docRef.id, newNote))
     }
 }
 
@@ -31,6 +38,15 @@ export const activeNote = (id, note) => ({
     }
 
 })
+
+export const addNewNote = (id, note) => ({
+    type: types.notesAddNew,
+    payload: {
+        id,
+        ...note
+    }
+})
+
 
 export const startLoadingNotes = (uid) => {
     return async (dispatch) => { // acción asíncrona porque depende del backend
@@ -45,6 +61,7 @@ export const setNotes = (notes) => ({ // Acción para enviar al store las notas 
     type: types.notesLoad,
     payload: notes
 })
+
 
 export const startSaveNote = (note) => { // Acción para guardar una nota en la BBDD
     // necesitaremos el middleware Thunk para poder comunicarnos con Firebase
@@ -66,6 +83,7 @@ export const startSaveNote = (note) => { // Acción para guardar una nota en la 
     }
 }
 
+
 export const refreshNote = (id, note) => ({ // Acción que permite refrescar una nota, en caso de que haya cambiado, por ejemplo, tras guardarla
     type: types.notesUpdated,
     payload: {
@@ -77,4 +95,50 @@ export const refreshNote = (id, note) => ({ // Acción que permite refrescar una
 
     }
 })
+
+
+export const startUploading = (file) => {  // Acción para subir una imagen a Cloudinary: requiere el helper fileUpload
+    return async (dispatch, getState) => {
+        const { active: actvNote } = getState().notes;
+
+        Swal.fire({
+            title: 'Uploading...',
+            text: 'Please wait...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        })
+        const fileUrl = await fileUpload(file);
+        actvNote.url = fileUrl;
+        //console.log(fileUrl);
+
+        dispatch(startSaveNote(actvNote)) // llama a la acción ya construita para guardar una nota
+        Swal.close();
+    }
+
+}
+
+
+export const startDeleting = (id) => { // Borra una nota de la BBDD y del store
+    return async (dispatch, getState) => {
+
+        const uid = getState().auth.uid;
+        await db.doc(`${uid}/journal/notes/${id}`).delete(); // Esto borra en Firebase
+
+        dispatch(deleteNote(id)) // Esto borra la nota del store
+
+    }
+}
+
+
+export const deleteNote = (id) => ({ // Borra una nota del store
+    type: types.notesDelete,
+    payload: id
+})
+
+export const notesLogout = () => ({
+    type: types.notesLogoutCleaning
+})
+
 

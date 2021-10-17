@@ -9,7 +9,7 @@ export const JournalScreen = () => {
     const { active: activeNote } = useSelector(state => state.notes); //para saber desde el reducer si la nota está o no activa
 
     return (
-        <div className="journal__main-content">
+        <div className="journal__main-content animate__animated animate__fadeIn animate__faster">
             <Sidebar />
 
             <main>

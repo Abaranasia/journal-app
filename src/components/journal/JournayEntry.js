@@ -15,13 +15,15 @@ export const JournayEntry = ({ id, date, title, body, url }) => {
     }
 
     return (
-        <div className="journal__entry pointer" onClick={handleEntryClick}>
+        <div
+            className="journal__entry pointer animate__animated animate__fadeIn animate__faster"
+            onClick={handleEntryClick}>
             <div
                 className="journal__entry-picture"
                 style={{
                     backgroundSize: 'cover',
-                    backgroundImage: 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVVkkZjXvk82ffyCBUJOEtt8fNbVpLUh2mpw&usqp=CAU)'
-                    //backgroundImage: `url(${url})`
+                    //backgroundImage: 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVVkkZjXvk82ffyCBUJOEtt8fNbVpLUh2mpw&usqp=CAU)'
+                    backgroundImage: `url(${url})`
                 }}
             >
             </div>

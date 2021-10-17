@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 
 import { types } from "../types/types";
 import { finishLoading, startLoading } from "./ui";
+import { notesLogout } from "./notes";
 
 /** Este módulo define los actions para el proceso de auth.
  *  Aquí incluiríamos todos los métodos de acceso necesarios: email, google, twitter, etc.
@@ -83,6 +84,7 @@ export const startLogout = () => {
         await firebase.auth().signOut();
 
         dispatch(logout())
+        dispatch(notesLogout())
     }
 }
 export const logout = (params) => ({
