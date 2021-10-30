@@ -13,6 +13,7 @@ import { fileUpload } from "../helpers/fileUpload";
 
 export const startNewNote = () => { // Acción para crear una nueva nota
     return async (dispatch, getState) => { //comunicación asíncrona con Thunk 
+        //Devuelve una función asíncrona que conteiene en dispatch y el getState
 
         const uid = getState().auth.uid;
         //console.log(uid)
@@ -137,7 +138,7 @@ export const deleteNote = (id) => ({ // Borra una nota del store
     payload: id
 })
 
-export const notesLogout = () => ({
+export const notesLogout = () => ({ //Lo limpia todo tras hacer logout
     type: types.notesLogoutCleaning
 })
 

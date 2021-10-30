@@ -5,6 +5,7 @@ import { types } from "../types/types";
 import { finishLoading, startLoading } from "./ui";
 import { notesLogout } from "./notes";
 
+
 /** Este módulo define los actions para el proceso de auth.
  *  Aquí incluiríamos todos los métodos de acceso necesarios: email, google, twitter, etc.
  */
@@ -17,11 +18,10 @@ export const startLoginEmailPassword = (email, password) => {
 
         dispatch(startLoading()); // Empieza el procedimiento de login
 
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(async ({ user }) => {
-                dispatch(
-                    login(user.uid, user.displayName)
-                );
+        
+        return firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(({ user }) => {
+                dispatch(login(user.uid, user.displayName));
                 dispatch(finishLoading()); // Finaliza el procedimiento de login 
             })
             .catch(e => {
@@ -55,7 +55,8 @@ export const startRegisterWithEmailPassword = (email, password, name) => {
 export const startGoogleLogin = () => {
     // middleware para login con usuario de Google que gestiona el action de login
 
-    return (dispatch) => { //devuelve un objeto llamado dispatch con eltipo y el payload
+    return (dispatch) => {
+    //devuelve una función asíncrona que recibe un dispatch con el tipo y el payload que deben ser enviados
 
         firebase.auth().signInWithPopup(googleAuthProvider)
             .then(({ user }) => {
