@@ -2,8 +2,26 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { types } from '../../types/types';
 import '@testing-library/jest-dom';
+import { firebase, googleAuthProvider } from "../../firebase/firebaseConfig";
+
 
 import { login, logout, startLoginEmailPassword, startLogout } from '../../actions/auth';
+
+import { getAuth } from 'firebase/auth';
+const auth = getAuth();
+//Evita el crasheo de tipo: INTERNAL ASSERTION FAILED: Expected a class definition en  firebase.auth()
+
+/* jest.mock('../../firebase/firebaseConfig', () => ({
+    signInWithEmailAndPassword: jest.fn()
+})) */
+
+jest.mock('firebase/app', () => {
+    return {
+        auth: jest.fn(),
+    };
+})
+
+
 
 /**
  * @jest-environment node
@@ -48,33 +66,34 @@ describe('Auth actions tests', () => {
     });
 
 
-    /*     test('startLogout should work ', async () => {
-            await store.dispatch(startLogout());
-            const actions = store.getActions();
-            // console.log(actions)
-    
-            expect(actions[0]).toEqual({
-                type: types.logout
-            })
-    
-            expect(actions[1]).toEqual({
-                type: types.notesLogoutCleaning
-            })
-        }); */
+    test('startLogout should work ', async () => {
+
+        await store.dispatch(startLogout());
+        const actions = store.getActions();
+        // console.log(actions)
+
+        expect(actions[0]).toEqual({
+            type: types.logout
+        })
+
+        expect(actions[1]).toEqual({
+            type: types.notesLogoutCleaning
+        })
+    });
 
 
-    /*     test('should init startLoginEmailPassword', async () => {
-    
-            await store.dispatch(startLoginEmailPassword('test@testing.com', '123ABC'));
-            const actions = store.getActions();
-            //console.log(actions)
-    
-            expect(actions[1]).toEqual({
-                type: types.login,
-                payload: {
-                    uid: 'RJxKzCmXuYfGuQ5OMujOBbDQZzn2',
-                    displayName: null
-                }
-            })
-        }); */
+    test('should init startLoginEmailPassword', async () => {
+
+        await store.dispatch(startLoginEmailPassword('test@testing.com', '123ABC'));
+        const actions = store.getActions();
+        //console.log(actions)
+
+        expect(actions[1]).toEqual({
+            type: types.login,
+            payload: {
+                uid: 'RJxKzCmXuYfGuQ5OMujOBbDQZzn2',
+                displayName: null
+            }
+        })
+    });
 });

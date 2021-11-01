@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JournayEntry tests should render properly 1`] = `
+Array [
+  " ",
+  <div
+    className="journal__entry pointer animate__animated animate__fadeIn animate__faster"
+    onClick={[Function]}
+  >
+    <div
+      className="journal__entry-picture"
+      style={
+        Object {
+          "backgroundImage": "url(https://testing.com/foto.jpg)",
+          "backgroundSize": "cover",
+        }
+      }
+    />
+    <div
+      className="journal__entry-body"
+    >
+      <p
+        className="journal__entry-title"
+      >
+        testing
+      </p>
+      <p
+        className="journal__entry-content"
+      >
+        body test
+      </p>
+    </div>
+    <div
+      className="journal__entry-date-box"
+    >
+      <span>
+        Thursday
+      </span>
+      <h5>
+        1
+         - 
+        Jan
+      </h5>
+    </div>
+  </div>,
+]
+`;
