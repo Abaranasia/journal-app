@@ -13,7 +13,7 @@ export const RegisterScreen = () => {
     const { msgError } = useSelector(state => state.ui);
     /** El hook useSelecto permite redirigir info desde el Store a la app
      * Aquí recibe el state de store y lo leemos para poder usar el mensaje de error */
-    console.log(msgError)
+   // console.log(msgError)
 
     const [formValues, handleInputChange] = useForm({
         name: 'Ran Kirlian',

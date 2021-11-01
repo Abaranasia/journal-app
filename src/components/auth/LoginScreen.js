@@ -32,6 +32,7 @@ export const LoginScreen = () => {
 
 
     const handleGoogleLogin = () => {
+        // console.log("hey") // for testing
         dispatch(startGoogleLogin()); // recibe type y payload para enviar al dispatcher
     }
 
